@@ -1,0 +1,4 @@
+_pycache__/
+*.pyc
+ToDo/backend/.venv
+ToDo/backend/__pycache__/
