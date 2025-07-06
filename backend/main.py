@@ -1,5 +1,5 @@
 # Project     :   ToDo List
-# Package     :   main 
+# Package     :   main.py 
 # Description :   This Package has the objective to start the web server using uvicorn
 # Modification History: 
 # *********************************************************
