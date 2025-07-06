@@ -1,8 +1,8 @@
 # Project     :   ToDo List
-# Package     :   ap.py
+# Package     :   api.py
 # Description :   API package for the ToDo List application
-#                This package contains the FastAPI application and its routes.
-#                It serves as the entry point for the web server.
+#                 This package contains the FastAPI application and its routes.
+#                 It serves as the entry point for the web server.
 # Modification History: 
 # *********************************************************
 # Date            Author          Modification

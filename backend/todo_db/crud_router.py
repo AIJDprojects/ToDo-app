@@ -79,6 +79,7 @@ def update_task_by_id(task_id: int, task_update: TaskUpdate):
     existing_task = get_task(task_id)
     if not existing_task:
         raise HTTPException(status_code=500, detail="Task not found")
+    
 
     # update the task in the database
     update_data  = task_update.model_dump(exclude_unset=True)

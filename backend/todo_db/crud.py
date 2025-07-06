@@ -6,10 +6,20 @@
 # *********************************************************
 # Date            Author          Modification
 # 05-07-2025      jdmunoz         Creation
+# 06-07-2025      jdmunoz         Refactor the connection to the database
+#                                 for better error handling and avoid
+#                                 connection blockage.
+#                                 Methods:
+#                                 - Insert_task
+#                                 - get_task
+#                                 - get_all_tasks
+#                                 - update_task
+#                                 - delete_task
 # *********************************************************
 
 
 # Libraries
+import sqlite3
 from datetime import datetime
 from todo_db.database import get_db_connection
 
@@ -21,22 +31,32 @@ from todo_db.database import get_db_connection
 # *********************************************************
 # Date            Author          Modification
 # 05-07-2025      jdmunoz         Creation
+# 06-07-2025      jdmunoz         Refactor the connection to the database
+#                                 for better error handling and avoid
+#                                 connection blockage.
 # *********************************************************
 def Insert_task(task: str, description: str = None) -> int: 
 
-    conn = get_db_connection()
-    cursor = conn.cursor()
+    try:
+        with get_db_connection() as conn:
+            cursor = conn.cursor()
 
-    cursor.execute(
-        'INSERT INTO tasks (task, description) VALUES (?, ?)',
-        (task, description)
-    )
+            cursor.execute(
+                'INSERT INTO tasks (task, description) VALUES (?, ?)',
+                (task, description)
+            )
 
-    conn.commit()
-    task_id = cursor.lastrowid
-    conn.close()
+            conn.commit()
+            task_id = cursor.lastrowid
 
-    return task_id
+            return task_id
+        
+    except sqlite3.OperationalError as e:
+        print(f"Database error in Insert_task: {e}")
+        return False
+    except Exception as e:
+        print(f"Unexpected error in Insert_task: {e}")
+        return False    
 
 
 # Project     :   ToDo List
@@ -46,21 +66,32 @@ def Insert_task(task: str, description: str = None) -> int:
 # *********************************************************
 # Date            Author          Modification
 # 05-07-2025      jdmunoz         Creation
+# 06-07-2025      jdmunoz         Refactor the connection to the database
+#                                 for better error handling and avoid
+#                                 connection blockage.
 # *********************************************************
 def get_task(task_id: int):
-     
-    conn = get_db_connection()
-    cursor = conn.cursor()
 
-    cursor.execute('SELECT * FROM tasks WHERE id = ?', (task_id,))
-    task = cursor.fetchone()
+    try: 
+        with get_db_connection() as conn:
+            cursor = conn.cursor()
 
-    conn.close()
+            cursor.execute('SELECT * FROM tasks WHERE id = ?', (task_id,))
+            task = cursor.fetchone()
 
-    if task is None:
-        return None 
-    
-    return task
+            #conn.close()
+
+            if task is None:
+                return None 
+            
+            return task
+        
+    except sqlite3.OperationalError as e:
+        print(f"Database error in get_task: {e}")
+        return False
+    except Exception as e:
+        print(f"Unexpected error in get_task: {e}")
+        return False         
 
 
 # Project     :   ToDo List
@@ -70,18 +101,28 @@ def get_task(task_id: int):
 # *********************************************************
 # Date            Author          Modification
 # 05-07-2025      jdmunoz         Creation
+# 06-07-2025      jdmunoz         Refactor the connection to the database
+#                                 for better error handling and avoid
+#                                 connection blockage.
 # *********************************************************
 def get_all_tasks():
+    try:
+        with get_db_connection() as conn:
+            cursor = conn.cursor()
 
-    conn = get_db_connection()
-    cursor = conn.cursor()
+            cursor.execute('SELECT * FROM tasks')
+            tasks = cursor.fetchall()
 
-    cursor.execute('SELECT * FROM tasks')
-    tasks = cursor.fetchall()
+            #conn.close()
 
-    conn.close()
-
-    return tasks
+            return tasks
+        
+    except sqlite3.OperationalError as e:
+        print(f"Database error in get_all_tasks: {e}")
+        return False
+    except Exception as e:
+        print(f"Unexpected error in get_all_tasks: {e}")
+        return False        
 
 
 
@@ -93,44 +134,62 @@ def get_all_tasks():
 # *********************************************************
 # Date            Author          Modification
 # 05-07-2025      jdmunoz         Creation
+# 06-07-2025      jdmunoz         Refactor the connection to the database
+#                                 for better error handling and avoid
+#                                 connection blockage.
 # *********************************************************
 def update_task(task_id: int, task_data: dict) -> bool:
     
-    conn = get_db_connection()
-    cursor = conn.cursor()
+    try:
+        with get_db_connection() as conn:
+            
+            cursor = conn.cursor()
 
-    updates = []
-    params = []
+            updates = []
+            params = []
 
-    # Prepare the update query dynamically based on provided task_data
-    for key, value in task_data.items():
-        if value is not None:
-            # Special handling for 'finished' key to set end_time
-            if key == "finished" and value == 'Y':
-                updates.append("end_time = ?")
-                params.append(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-            else:
-                updates.append(f"{key} = ?")
-                params.append(value)
-                
+            # Prepare the update query dynamically based on provided task_data
+            for key, value in task_data.items():
+                if value is not None:
+                    # Special handling for 'finished' key to set end_time
+                    if key == "finished" and value == 'Y':
+                        updates.append("end_time = ?")
+                        params.append(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+                        updates.append(f"{key} = ?")
+                        params.append(value)
+                    elif key == "finished" and value == 'N':    
+                        updates.append("end_time = ?")
+                        params.append(None)
+                        updates.append(f"{key} = ?")
+                        params.append(value)
+                    else:
+                        updates.append(f"{key} = ?")
+                        params.append(value)
+                        
 
-    if not updates:
-        conn.close()
+            if not updates:
+                conn.close()
+                return False
+
+            # append the task_id to the parameters for the WHERE clause
+            params.append(task_id)      
+
+            # Create the update query
+            update_query = f"UPDATE tasks SET {', '.join(updates)} WHERE id = ?"
+
+            # Execute the update query
+            cursor.execute(update_query, params)
+
+            conn.commit()
+
+            return True    
+    
+    except sqlite3.OperationalError as e:
+        print(f"Database error in update_task: {e}")
         return False
-
-    # append the task_id to the parameters for the WHERE clause
-    params.append(task_id)      
-
-    # Create the update query
-    update_query = f"UPDATE tasks SET {', '.join(updates)} WHERE id = ?"
-
-    # Execute the update query
-    cursor.execute(update_query, params)
-
-    conn.commit()
-    conn.close()
-
-    return True    
+    except Exception as e:
+        print(f"Unexpected error in update_task: {e}")
+        return False
 
 
 # Project     :   ToDo List
@@ -140,19 +199,30 @@ def update_task(task_id: int, task_data: dict) -> bool:
 # *********************************************************
 # Date            Author          Modification
 # 05-07-2025      jdmunoz         Creation
+# 06-07-2025      jdmunoz         Refactor the connection to the database
+#                                 for better error handling and avoid
+#                                 connection blockage.
 # *********************************************************
 def delete_task(task_id: int) -> bool:
 
-    conn = get_db_connection()
-    cursor = conn.cursor()
+    try:
+        with get_db_connection() as conn:
+            cursor = conn.cursor()
 
-    cursor.execute('DELETE FROM tasks WHERE id = ?', (task_id))
-    conn.commit()
+            cursor.execute('DELETE FROM tasks WHERE id = ?', (task_id,))
+            conn.commit()
 
-    rows_afected = cursor.rowcount
-    conn.close()
+            rows_afected = cursor.rowcount
+            #conn.close()
 
-    return rows_afected > 0
+            return rows_afected > 0
+        
+    except sqlite3.OperationalError as e:
+        print(f"Database error in delete_task: {e}")
+        return False
+    except Exception as e:
+        print(f"Unexpected error in delete_task: {e}")
+        return False        
 
 
 

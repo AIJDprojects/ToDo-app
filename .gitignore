@@ -2,3 +2,4 @@ _pycache__/
 *.pyc
 ToDo/backend/.venv
 ToDo/backend/__pycache__/
+ToDo/backend/todo_db/__pycache__/
