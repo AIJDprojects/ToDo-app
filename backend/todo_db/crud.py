@@ -105,7 +105,7 @@ def get_task(task_id: int):
 #                                 for better error handling and avoid
 #                                 connection blockage.
 # *********************************************************
-def get_all_tasks():
+def get_all_tasks() -> list:
     try:
         with get_db_connection() as conn:
             cursor = conn.cursor()
