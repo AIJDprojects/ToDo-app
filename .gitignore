@@ -1,7 +1,8 @@
 _pycache__/
 *.pyc
-ToDo/backend/.venv
-ToDo/backend/__pycache__/
-ToDo/backend/todo_db/__pycache__/
-ToDo/backend/todo_ai/.env
+backend/.venv
+backend/__pycache__/
+backend/todo_db/__pycache__/
+backend/todo_ai/.env
+
 
