@@ -11,9 +11,15 @@
 
 
 from fastapi import FastAPI
+from todo_db.crud_router import router as crud_router
 
-# Create dummy api
+# Create the API
 app = FastAPI()
+
+# Include the CRUD router
+app.include_router(crud_router, prefix="/crud")
+
+
 
 @app.get("/hi")
 def hi():
