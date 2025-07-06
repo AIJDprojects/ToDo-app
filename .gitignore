@@ -3,3 +3,5 @@ _pycache__/
 ToDo/backend/.venv
 ToDo/backend/__pycache__/
 ToDo/backend/todo_db/__pycache__/
+ToDo/backend/todo_ai/.env
+
