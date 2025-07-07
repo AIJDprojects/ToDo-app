@@ -4,5 +4,6 @@ backend/.venv
 backend/__pycache__/
 backend/todo_db/__pycache__/
 backend/todo_ai/.env
+backend/todo_ai/__pycache__
 
 

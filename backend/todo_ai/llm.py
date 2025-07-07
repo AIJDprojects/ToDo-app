@@ -63,7 +63,7 @@ class CodeGPTLLM(CustomLLM):
             context_window=4096,
             num_output=256,
             model_name="codegpt-custom",
-            is_chat_model=True,  # Set to True if your model supports chat format
+            is_chat_model=True, 
             is_function_calling_model=False
         )   
 
