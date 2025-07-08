@@ -48,10 +48,9 @@ class DataSanitizer:
 
         if not isinstance(text, str):
             raise ValidationError("Input must be a string.")
-        
+           
         # Remove whitespace 
         text = text.strip()
-
         # Remove HTML tags
         text = bleach.clean(text, tags=[], strip=True)
 
@@ -75,7 +74,6 @@ class DataSanitizer:
 
         # remove consecutive spaces
         sanitized = re.sub(r'\s+', ' ', sanitized)
-
         if len(sanitized) < 3:
             raise ValidationError("Task name must be at least 3 characters long.")
         
@@ -210,65 +208,58 @@ class SQLInjectionProtector:
         return text
     
     
-    # Project     :   ToDo List
-    # Method      :   InputValidator
-    # Description :   Main validator class that combines all 
-    #                validation methods.
-    # Modification History:
-    # *********************************************************
-    # Date            Author          Modification
-    # 05-07-2025      jdmunoz         Creation
-    # *********************************************************
-    class InputValidator:
+# Project     :   ToDo List
+# Method      :   InputValidator
+# Description :   Main validator class that combines all 
+#                validation methods.
+# Modification History:
+# *********************************************************
+# Date            Author          Modification
+# 05-07-2025      jdmunoz         Creation
+# *********************************************************
+class InputValidator:
+
+    # Validate data for task creation
+    @staticmethod
+    def validate_task_creation(task: str, description: Optional[str] = None) -> Dict[str, Any]:
+        
+        
+        # Check for SQL injection
+        SQLInjectionProtector.validate_safe_input(task)
+        if description:
+            SQLInjectionProtector.validate_safe_input(description)
+        
+        # Sanitize data
+        validated_data = {
+            'task': DataSanitizer.sanitize_task_name(task),
+            'description': DataSanitizer.sanitize_description(description)
+        }
+        
+        return validated_data
     
-        # Validate data for task creation
-        @staticmethod
-        def validate_task_creation(task: str, description: Optional[str] = None) -> Dict[str, Any]:
-            
-            
-            # Check for SQL injection
-            SQLInjectionProtector.validate_safe_input(task)
-            if description:
-                SQLInjectionProtector.validate_safe_input(description)
-            
-            # Sanitize data
-            validated_data = {
-                'task': DataSanitizer.sanitize_task_name(task),
-                'description': DataSanitizer.sanitize_description(description)
-            }
-            
-            return validated_data
-        
 
-        # Validate data for task update
-        @staticmethod
-        def validate_task_update(task_id: Any, update_data: Dict[str, Any]) -> tuple[int, Dict[str, Any]]:
-            
-            # Validate ID
-            validated_id = DataValidator.validate_id(task_id)
-            
-            # Check for SQL injection in all string fields
-            for key, value in update_data.items():
-                if isinstance(value, str):
-                    SQLInjectionProtector.validate_safe_input(value)
-            
-            # Validate and sanitize update data
-            validated_data = DataValidator.validate_task_data(update_data)
-            
-            return validated_id, validated_data
+    # Validate data for task update
+    @staticmethod
+    def validate_task_update(task_id: Any, update_data: Dict[str, Any]) -> tuple[int, Dict[str, Any]]:
         
+        # Validate ID
+        validated_id = DataValidator.validate_id(task_id)
+        
+        # Check for SQL injection in all string fields
+        for key, value in update_data.items():
+            if isinstance(value, str):
+                SQLInjectionProtector.validate_safe_input(value)
+        
+        # Validate and sanitize update data
+        validated_data = DataValidator.validate_task_data(update_data)
+        
+        return validated_id, validated_data 
+   
+    # Validate data for task retrieval
+    @staticmethod
+    def validate_task_id(task_id: Any) -> int:
 
-        # Validate data for task deletion
-        @staticmethod
-        def validate_task_deletion(task_id: Any) -> int:
-            
-            return DataValidator.validate_id(task_id)
-        
-        # Validate data for task retrieval
-        @staticmethod
-        def validate_task_retrieval(task_id: Any) -> int:
-            
-            return DataValidator.validate_id(task_id)
+        return DataValidator.validate_id(task_id)
 
 
 

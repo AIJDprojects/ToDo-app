@@ -6,33 +6,23 @@
 # *********************************************************
 # Date            Author          Modification
 # 05-07-2025      jdmunoz         Creation
+# 08-07-2025      jdmunoz         the method query_tasks was moved to the
+#                                 todo_ai.llm module.
+#                                 Change in the prompt 
 # *********************************************************
 
 
 # Libraries
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse
-from todo_ai.llm import query_llm
+from todo_ai.llm import query_tasks
 # *********************************************************
 
 
 # Constants
-PROMPT = "Give me a summary of the taks qhere you specified percentage of completion, percentage of not complete. You can add a motivational phrase"
+PROMPT = "Give me a summary of the taks Where you specified percentage of completion, " \
+        "percentage of not complete. add an insight (add emojis throughout the response, at lest 3 emojis)" \
 # *********************************************************
-
-
-# Project     :   ToDo List
-# Method      :   query_tasks
-# Description :   Private method to query the LLM with a PROMPT.
-# Modification History:
-# *********************************************************
-# Date            Author          Modification
-# 05-07-2025      jdmunoz         Creation
-# *********************************************************
-def query_tasks(question: str) -> str:
-    query_engine = query_llm()
-    response = query_engine.query(question)
-    return str(response)
 
 
 

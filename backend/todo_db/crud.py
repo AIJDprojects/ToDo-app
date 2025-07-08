@@ -15,6 +15,12 @@
 #                                 - get_all_tasks
 #                                 - update_task
 #                                 - delete_task
+# 08-07-2025      jdmunoz         Add validation and sanitization
+#                                 Methods:
+#                                 - Insert_task
+#                                 - get_task
+#                                 - update_task
+#                                 - delete_task
 # *********************************************************
 
 
@@ -22,6 +28,7 @@
 import sqlite3
 from datetime import datetime
 from todo_db.database import get_db_connection
+from todo_db.validation import InputValidator, ValidationError
 
 
 # Project     :   ToDo List
@@ -34,23 +41,29 @@ from todo_db.database import get_db_connection
 # 06-07-2025      jdmunoz         Refactor the connection to the database
 #                                 for better error handling and avoid
 #                                 connection blockage.
+# 08-07-2025      jdmunoz         Add validation and sanitization 
 # *********************************************************
 def Insert_task(task: str, description: str = None) -> int: 
 
     try:
+        # validate and snitize the task input in the insert method    
+        validated_data = InputValidator.validate_task_creation(task, description)
+
         with get_db_connection() as conn:
             cursor = conn.cursor()
 
             cursor.execute(
                 'INSERT INTO tasks (task, description) VALUES (?, ?)',
-                (task, description)
+                (validated_data['task'], validated_data['description'])
             )
 
             conn.commit()
             task_id = cursor.lastrowid
 
             return task_id
-        
+    except ValidationError as e:   
+        print(f"Validation error in Insert_task: {e}")
+        return False        
     except sqlite3.OperationalError as e:
         print(f"Database error in Insert_task: {e}")
         return False
@@ -69,14 +82,19 @@ def Insert_task(task: str, description: str = None) -> int:
 # 06-07-2025      jdmunoz         Refactor the connection to the database
 #                                 for better error handling and avoid
 #                                 connection blockage.
+# 08-07-2025      jdmunoz         Add validation and sanitization 
 # *********************************************************
 def get_task(task_id: int):
 
     try: 
+        
+        # validate task_id 
+        validated_data = InputValidator.validate_task_id(task_id)
+
         with get_db_connection() as conn:
             cursor = conn.cursor()
 
-            cursor.execute('SELECT * FROM tasks WHERE id = ?', (task_id,))
+            cursor.execute('SELECT * FROM tasks WHERE id = ?', (validated_data,))
             task = cursor.fetchone()
 
             #conn.close()
@@ -85,7 +103,9 @@ def get_task(task_id: int):
                 return None 
             
             return task
-        
+    except ValidationError as e:
+        print(f"Validation error in get_task: {e}")
+        return False         
     except sqlite3.OperationalError as e:
         print(f"Database error in get_task: {e}")
         return False
@@ -137,10 +157,16 @@ def get_all_tasks() -> list:
 # 06-07-2025      jdmunoz         Refactor the connection to the database
 #                                 for better error handling and avoid
 #                                 connection blockage.
+# 08-07-2025      jdmunoz         Add validation and sanitization 
 # *********************************************************
 def update_task(task_id: int, task_data: dict) -> bool:
     
     try:
+        
+        # validate and snitize the task input
+        validated_id, validated_data = InputValidator.validate_task_update(task_id, task_data)
+        
+
         with get_db_connection() as conn:
             
             cursor = conn.cursor()
@@ -149,7 +175,7 @@ def update_task(task_id: int, task_data: dict) -> bool:
             params = []
 
             # Prepare the update query dynamically based on provided task_data
-            for key, value in task_data.items():
+            for key, value in validated_data.items():
                 if value is not None:
                     # Special handling for 'finished' key to set end_time
                     if key == "finished" and value == 'Y':
@@ -172,7 +198,7 @@ def update_task(task_id: int, task_data: dict) -> bool:
                 return False
 
             # append the task_id to the parameters for the WHERE clause
-            params.append(task_id)      
+            params.append(validated_id)      
 
             # Create the update query
             update_query = f"UPDATE tasks SET {', '.join(updates)} WHERE id = ?"
@@ -183,7 +209,9 @@ def update_task(task_id: int, task_data: dict) -> bool:
             conn.commit()
 
             return True    
-    
+    except ValidationError as e:
+        print(f"Validation error in update_task: {e}")
+        return False
     except sqlite3.OperationalError as e:
         print(f"Database error in update_task: {e}")
         return False
@@ -202,21 +230,28 @@ def update_task(task_id: int, task_data: dict) -> bool:
 # 06-07-2025      jdmunoz         Refactor the connection to the database
 #                                 for better error handling and avoid
 #                                 connection blockage.
+# 08-07-2025      jdmunoz         Add validation and sanitization 
 # *********************************************************
 def delete_task(task_id: int) -> bool:
 
     try:
+
+        # validate task_id 
+        validated_data = InputValidator.validate_task_id(task_id)
+
         with get_db_connection() as conn:
             cursor = conn.cursor()
 
-            cursor.execute('DELETE FROM tasks WHERE id = ?', (task_id,))
+            cursor.execute('DELETE FROM tasks WHERE id = ?', (validated_data,))
             conn.commit()
 
             rows_afected = cursor.rowcount
             #conn.close()
 
             return rows_afected > 0
-        
+    except ValidationError as e:
+        print(f"Validation error in delete_task: {e}")
+        return False    
     except sqlite3.OperationalError as e:
         print(f"Database error in delete_task: {e}")
         return False

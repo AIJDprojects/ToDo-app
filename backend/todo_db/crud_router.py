@@ -74,7 +74,7 @@ def get_all():
 # *********************************************************
 @router.put("/update/{task_id}", response_model=Task)
 def update_task_by_id(task_id: int, task_update: TaskUpdate):
-
+    
     # validate the task ID
     existing_task = get_task(task_id)
     if not existing_task:
@@ -106,6 +106,10 @@ def update_task_by_id(task_id: int, task_update: TaskUpdate):
 # *********************************************************
 @router.delete("/delete/{task_id}")
 def delete_task_by_id(task_id: int):
+
+    existing_task = get_task(task_id)
+    if not existing_task:
+        raise HTTPException(status_code=500, detail="Task not found")
 
     deleted = delete_task(task_id)
 

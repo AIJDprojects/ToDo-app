@@ -137,3 +137,24 @@ def query_llm():
 
     return query_engine
 
+
+
+# Project     :   ToDo List
+# Method      :   query_tasks
+# Description :   Private method to query the LLM with a PROMPT.
+# Modification History:
+# *********************************************************
+# Date            Author          Modification
+# 05-07-2025      jdmunoz         Creation
+# 08-07-2025      jdmunoz         The method query_tasks was moved to the
+#                                 todo_ai.llm module. AS the Routers
+#                                 are ment to had only the endpoints
+#                                 and not the logic.
+# *********************************************************
+def query_tasks(question: str) -> str:
+    query_engine = query_llm()
+    response = query_engine.query(question)
+    return str(response)
+
+
+
