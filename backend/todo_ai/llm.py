@@ -150,11 +150,17 @@ def query_llm():
 #                                 todo_ai.llm module. AS the Routers
 #                                 are ment to had only the endpoints
 #                                 and not the logic.
+#                                 added llm_query_engine that is 
+#                                 query engine initialized 
 # *********************************************************
 def query_tasks(question: str) -> str:
-    query_engine = query_llm()
+    query_engine = llm_query_engine
     response = query_engine.query(question)
     return str(response)
 
 
+
+
+# Initialize the LLM query engine as soon as the module is imported
+llm_query_engine = query_llm()
 
