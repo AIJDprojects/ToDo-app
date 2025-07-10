@@ -1,0 +1,5 @@
+Commands 
+
+--create the react project 
+npx create-react-app todoap-frontend
+
