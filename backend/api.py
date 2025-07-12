@@ -11,11 +11,21 @@
 
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware  # Add this import
 from todo_db.crud_router import router as crud_router
 from todo_ai.llm_router import router as llm_router
 
 # Create the API
 app = FastAPI()
+
+# Add CORS middleware - ADD THIS SECTION
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # React app URL
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all HTTP methods
+    allow_headers=["*"],  # Allow all headers
+)
 
 # Include the CRUD router
 app.include_router(crud_router, prefix="/crud")

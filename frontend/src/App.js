@@ -7,36 +7,105 @@
 // 05-07-2025      jdmunoz         Creation
 // *********************************************************
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import TodoForm from './components/todoform';
 import TodoList from './components/todolist';
+import { todoAPI } from './services/api';
 
 function App() {
-
-  // State to holde the todos
+  // State to hold the todos
   const [todos, setTodos] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [aiInsights, setAiInsights] = useState('');
 
-  // add a new Task (using TodoForm)
-  const handleAddTodo = (newTodo) => {
-    const todoWithId = {
-      ...newTodo,
-      id: Date.now(),
-      finished: 'N'
+  // Load todos when component mounts
+  useEffect(() => {
+    loadTodos();
+  }, []);
+
+  // Auto-update AI insights whenever todos change
+  useEffect(() => {
+    if (todos.length > 0) {
+      updateAIInsights();
+    }
+  }, [todos]);
+
+  // Function to convert array format to object format
+  const convertArrayToTodo = (todoArray) => {
+    return {
+      id: todoArray[0],
+      task: todoArray[1],
+      description: todoArray[2],
+      created_date: todoArray[3],
+      updated_date: todoArray[4],
+      finished: todoArray[5]
     };
+  };
 
-    setTodos([...todos, todoWithId]);
+  // Function to load todos from API
+  const loadTodos = async () => {
+    try {
+      setLoading(true);
+      const todosData = await todoAPI.getAllTasks();
+      // Convert array format to object format
+      const convertedTodos = todosData.map(convertArrayToTodo);
+      setTodos(convertedTodos);
+    } catch (error) {
+      console.error('Failed to load todos:', error);
+      alert('Failed to load todos. Make sure your backend is running!');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Function to add a new todo (using API)
+  const handleAddTodo = async (newTodo) => {
+    try {
+      setLoading(true);
+      const createdTodo = await todoAPI.createTask(newTodo);
+      // Convert the response and add to todos
+      const convertedTodo = Array.isArray(createdTodo) ? convertArrayToTodo(createdTodo) : createdTodo;
+      setTodos([...todos, convertedTodo]);
+    } catch (error) {
+      console.error('Failed to create todo:', error);
+      alert('Failed to create todo. Please try again!');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Function to update AI insights automatically
+  const updateAIInsights = async () => {
+    try {
+      const insights = await todoAPI.getAIInsights();
+      setAiInsights(insights.response);
+    } catch (error) {
+      console.error('Failed to get AI insights:', error);
+      // Don't show alert for automatic updates, just log the error
+    }
   };
 
   return (
     <div className="App">
       <header className="todo-header">
-        <h1> 📝 Todo AI</h1>
+        <h1>📝 Todo AI</h1>
         <p>AI Driven Todo List application 🤖 </p>
       </header>
       
       <main className="todo-main">
         <TodoForm onAddTodo={handleAddTodo} />
+        
+        {/* AI Insights Section - Auto-updated */}
+        {aiInsights && (
+          <div className="ai-section">
+            <div className="ai-insights">
+              <h3>🤖 AI Analysis:</h3>
+              <p>{aiInsights}</p>
+            </div>
+          </div>
+        )}
+
         <TodoList todos={todos} />
       </main>
     </div>
@@ -44,3 +113,4 @@ function App() {
 }
 
 export default App;
+
