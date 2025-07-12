@@ -15,9 +15,16 @@ function TodoList({ todos }) {
         <div>
           <h3>Your Tasks:</h3>
           {todos.map(todo => (
-            <div key={todo.id} className="todo-item">
-              <h4>{todo.task}</h4>
-              {todo.description && <p>{todo.description}</p>}
+            <div key={todo.id} className={`todo-item ${todo.finished === 'Y' ? 'completed' : ''}`}>
+              <div className="todo-content">
+                <div className="todo-checkbox">
+                  {todo.finished === 'Y' ? '✅' : '⏳'}
+                </div>
+                <div className="todo-text">
+                  <h4>{todo.task}</h4>
+                  {todo.description && <p>{todo.description}</p>}
+                </div>
+              </div>
             </div>
           ))}
         </div>

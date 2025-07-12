@@ -94,17 +94,19 @@ function App() {
       </header>
       
       <main className="todo-main">
-        <TodoForm onAddTodo={handleAddTodo} />
+        
         
         {/* AI Insights Section - Auto-updated */}
         {aiInsights && (
           <div className="ai-section">
             <div className="ai-insights">
-              <h3>🤖 AI Analysis:</h3>
+              <h3>🤖 AI Assistant:</h3>
               <p>{aiInsights}</p>
             </div>
           </div>
         )}
+
+        <TodoForm onAddTodo={handleAddTodo} />
 
         <TodoList todos={todos} />
       </main>

@@ -13,7 +13,7 @@ body {
 
 /* Main app container */
 .App {
-  max-width: 600px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 20px;
   min-height: 100vh;
@@ -49,6 +49,74 @@ body {
   padding: 30px;
   box-shadow: 0 10px 40px rgba(0,0,0,0.1);
 }
+
+.ai-section {
+  margin: 30px 0;
+  padding: 25px;
+  background: rgba(193, 196, 236, 0.6);
+  border-radius: 15px;
+  box-shadow: 
+    8px 8px 16px rgba(0, 0, 0, 0.1),          /* Outer shadow */
+    -8px -8px 16px rgba(83, 142, 197, 0.8);   /* Inner highlight */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Add a subtle inner border for more depth */
+.ai-section::before {
+  content: '';
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  right: 1px;
+  bottom: 1px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), transparent);
+  border-radius: 14px;
+  pointer-events: none;
+}
+
+.ai-insights h3 {
+  color: #25344d;
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ai-insights p {
+  color: #24334e;
+  line-height: 1.7;
+  margin: 0;
+  font-size: 1rem;
+  background: rgba(202, 199, 233, 0.6);
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.ai-section.loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.ai-section.loading::after {
+  content: '🤖 Analyzing your tasks...';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(102, 126, 234, 0.9);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  z-index: 10;
+}
+
 
 /* Add todo section */
 .add-todo {
@@ -213,34 +281,56 @@ body {
 
 /* Individual Todo Item Styles */
 .todo-item {
-  background: #f8f9fa;
-  border: 1px solid #e9ecef;
-  border-radius: 12px;
+  margin: 20px 0;
   padding: 20px;
-  margin-bottom: 15px;
-  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 12px;
+  box-shadow: 
+    6px 6px 12px rgba(0, 0, 0, 0.1),          /* Outer shadow */
+    -6px -6px 12px rgba(83, 142, 197, 0.6);   /* Inner highlight - matching your AI section */
+  border: 1px solid rgba(255, 255, 255, 0.2);
   position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
 }
+
+.todo-item::before {
+  content: '';
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  right: 1px;
+  bottom: 1px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), transparent);
+  border-radius: 11px;
+  pointer-events: none;
+}
+
 
 .todo-item:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-  border-color: #667eea;
+  box-shadow: 
+    8px 8px 16px rgba(0, 0, 0, 0.15),
+    -8px -8px 16px rgba(83, 142, 197, 0.8);
 }
 
-.todo-item h4 {
+
+.todo-text h4 {
   color: #678ac5;
   font-size: 1.2rem;
   font-weight: 600;
   margin-bottom: 8px;
   line-height: 1.4;
+  margin-top: 0;
 }
 
-.todo-item p {
+.todo-text p {
   color: #718096;
-  font-size: 0.95rem;
-  line-height: 1.5;
+  line-height: 1.6;
   margin: 0;
+  font-size: 0.95rem;
+  background: rgba(199, 204, 233, 0.4);  
+  margin-left: 0;
   font-style: italic;
 }
 
@@ -261,7 +351,7 @@ body {
   border-radius: 12px;
   padding: 40px 20px;
   text-align: center;
-  color: #a0aec0;
+  color: #25344d;;
   font-size: 1.1rem;
   margin-bottom: 20px;
 }
@@ -281,6 +371,7 @@ body {
 /* Todo list section */
 .todo-list {
   min-height: 200px;
+  margin-top: 20px;
 }
 
 .todo-list p {
@@ -289,4 +380,38 @@ body {
   font-style: italic;
   padding: 40px 0;
   font-size: 1.1rem;
+}
+
+.todo-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  position: relative;
+  z-index: 1;
+}
+
+.todo-checkbox {
+  font-size: 1.5rem;
+  line-height: 1;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.todo-text {
+  flex: 1;
+}
+
+.todo-item.completed .todo-text h4 {
+  text-decoration: line-through;
+  opacity: 0.7;
+  color: #718096;
+}
+
+
+
+.todo-item.completed {
+  background: rgba(72, 187, 120, 0.05);
+  box-shadow: 
+    6px 6px 12px rgba(0, 0, 0, 0.08),
+    -6px -6px 12px rgba(30, 112, 64, 0.3);
 }
