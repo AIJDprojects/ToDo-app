@@ -56,19 +56,19 @@ function TodoForm({ onAddTodo }) {
         <button onClick={handleAddTaskClick}>Add Task!</button>
       ) : (
         // Form state - show input fields
-        <div className="todo-form"> 
-        <h2>Add a new task</h2>
+        <div className="todo-form">  
+        <h2>Add a new task </h2>
         <div className="input-section">
             <div className="input-fields">
             <input 
                 type="text" 
-                placeholder="Task title (required)" 
+                placeholder="✏️ Task title*" 
                 value={taskInput}
                 onChange={(e) => setTaskInput(e.target.value)}
             />
             <input 
                 type="text" 
-                placeholder="Description (optional)" 
+                placeholder="✏️ Description" 
                 value={descriptionInput}
                 onChange={(e) => setDescriptionInput(e.target.value)}
             />

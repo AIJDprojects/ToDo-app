@@ -52,9 +52,13 @@ body {
 
 /* Add todo section */
 .add-todo {
+  background: rgb(251, 251, 252);
   display: flex;
   gap: 15px;
   margin-bottom: 30px;
+  width: 100% !important;
+  max-width: 100% !important;
+  
 }
 
 .add-todo input {
@@ -101,21 +105,34 @@ body {
 
 /* Todo Form Styles */
 .todo-form {
+  width: 100% !important;
+  max-width: 100% !important;
   display: flex;
   flex-direction: column;
   gap: 15px;
+}
+
+.todo-form h2 {
+  color: #1c4696;           
+  font-size: 1.5rem;        
+  font-weight: 600;         
+  margin-bottom: 15px;      
+  text-align: center;          
 }
 
 .todo-form .input-section {
   display: flex;
   flex-direction: column;
   gap: 15px;
+  width: 100%;
 }
 
 .todo-form .input-fields {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  width: 100%;
+  flex: 1; 
 }
 
 .todo-form .button-section {
@@ -123,15 +140,28 @@ body {
   gap: 10px;
   justify-content: flex-end; 
   margin-top: 10px;
+  width: 95%; 
 }
 
 .todo-form input {
-  padding: 17px 150px;
+  padding: 15px 20px;  
   border: 2px solid #4a98cf;
   border-radius: 10px;
   font-size: 1rem;
   transition: all 0.3s ease;
   outline: none;
+  text-align: left;
+  width: 90%; 
+  max-width: 800px;  
+  box-sizing: border-box;
+  align-self: center;
+  
+}
+
+.todo-form input::placeholder {
+  color: #9ca3af;            /* Placeholder color */
+  text-align: left;          /* Placeholder starts from left */
+  padding-left: 0;           /* No extra left padding */
 }
 
 .todo-form input:focus {
@@ -199,7 +229,7 @@ body {
 }
 
 .todo-item h4 {
-  color: #2d3748;
+  color: #678ac5;
   font-size: 1.2rem;
   font-weight: 600;
   margin-bottom: 8px;
@@ -216,7 +246,7 @@ body {
 
 /* Todo List Header */
 .todo-list h3 {
-  color: #2d3748;
+  color: #5774a7;
   font-size: 1.4rem;
   font-weight: 600;
   margin-bottom: 20px;
@@ -255,7 +285,7 @@ body {
 
 .todo-list p {
   text-align: center;
-  color: #9ca3af;
+  color: #5c78aa;
   font-style: italic;
   padding: 40px 0;
   font-size: 1.1rem;
