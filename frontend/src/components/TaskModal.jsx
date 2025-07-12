@@ -7,6 +7,7 @@
 // 12-07-2025      jdmunoz         Creation
 // *********************************************************
 import { useState, useEffect } from 'react';
+import React from 'react';
 
 function TaskModal({ isOpen, onClose, onSave, task = null, loading = false }) {
   const [taskInput, setTaskInput] = useState('');

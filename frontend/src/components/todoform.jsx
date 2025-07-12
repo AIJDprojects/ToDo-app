@@ -53,7 +53,7 @@ function TodoForm({ onAddTodo }) {
     <div className="add-todo">
       {!showForm ? (
         // Initial state - just the "Add Task!" button
-        <button onClick={handleAddTaskClick}>Add Task!</button>
+        <button className="addtask-btn" onClick={handleAddTaskClick}>Add Task!</button>
       ) : (
         // Form state - show input fields
         <div className="todo-form">  
@@ -74,8 +74,8 @@ function TodoForm({ onAddTodo }) {
             />
             </div>
             <div className="button-section">
-            <button onClick={handleSubmit} className="save-btn">Save Task</button>
-            <button onClick={handleCancel} className="cancel-btn">Cancel</button>
+            <button onClick={handleSubmit} className="savet-btn">💾 Save Task</button>
+            <button onClick={handleCancel} className="cancelt-btn">Cancel</button>
             </div>
         </div>
         

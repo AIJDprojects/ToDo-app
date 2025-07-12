@@ -1,8 +1,0 @@
-Commands 
-
---create the react project 
-npx create-react-app todoap-frontend
-
-
--- start the project in the port 3000 
-npm start

@@ -9,11 +9,11 @@
 
 import { useState, useEffect } from 'react';
 import './App.css';
-import TodoForm from './components/todoform';
-import TodoList from './components/todolist';
-import Modal from './components/Modal';
-import TaskModal from './components/TaskModal';
-import { todoAPI } from './services/api';
+import TodoForm from './components/todoform.jsx';
+import TodoList from './components/todolist.jsx';
+import Modal from './components/Modal.jsx';
+import TaskModal from './components/TaskModal.jsx';
+import { todoAPI } from './services/api.jsx';
 
 function App() {
   // State to hold the todos
@@ -70,7 +70,7 @@ function App() {
       setTodos(convertedTodos);
     } catch (error) {
       console.error('Failed to load todos:', error);
-      alert('Failed to load todos. Make sure your backend is running!');
+      showAlert('Failed to load todos. Make sure your backend is running!');
     } finally {
       setLoading(false);
     }
@@ -264,4 +264,3 @@ function App() {
 }
 
 export default App;
-
