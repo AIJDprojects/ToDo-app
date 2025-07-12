@@ -144,7 +144,7 @@ class DataValidator:
             validated_data['task'] = DataSanitizer.sanitize_task_name(data['task'])
 
         if 'description' in data:
-            validated_data['description'] = DataSanitizer.sanitize_description(data('description'))
+            validated_data['description'] = DataSanitizer.sanitize_description(data['description'])
 
         if 'finished' in data:
             validated_data['finished'] = DataSanitizer.sanitixe_finished_status(data['finished']) 

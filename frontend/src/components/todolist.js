@@ -6,7 +6,8 @@
 // Date            Author          Modification
 // 11-07-2025      jdmunoz         Creation
 // *********************************************************
-function TodoList({ todos, onToggleComplete, loading }) {
+function TodoList({ todos, onToggleComplete, onEditTask, onDeleteTask, loading }) {
+
   // Function to format the date nicely
   const formatDate = (dateString) => {
     if (!dateString) return '';
@@ -47,6 +48,24 @@ function TodoList({ todos, onToggleComplete, loading }) {
                   <div className="todo-date">
                     📅 Created: {formatDate(todo.created_date)}
                   </div>
+                </div>
+                <div className="todo-actions">
+                  <button
+                    onClick={() => onEditTask(todo.id, todo)}
+                    disabled={loading}
+                    className="action-btn edit-btn"
+                    title="Edit task"
+                  >
+                    ✏️
+                  </button>
+                  <button
+                    onClick={() => onDeleteTask(todo.id, todo.task)}
+                    disabled={loading}
+                    className="action-btn delete-btn"
+                    title="Delete task"
+                  >
+                    🗑️
+                  </button>
                 </div>
               </div>
             </div>

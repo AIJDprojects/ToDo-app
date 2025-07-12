@@ -166,7 +166,6 @@ def update_task(task_id: int, task_data: dict) -> bool:
         # validate and snitize the task input
         validated_id, validated_data = InputValidator.validate_task_update(task_id, task_data)
         
-
         with get_db_connection() as conn:
             
             cursor = conn.cursor()

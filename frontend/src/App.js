@@ -11,6 +11,8 @@ import { useState, useEffect } from 'react';
 import './App.css';
 import TodoForm from './components/todoform';
 import TodoList from './components/todolist';
+import Modal from './components/Modal';
+import TaskModal from './components/TaskModal';
 import { todoAPI } from './services/api';
 
 function App() {
@@ -24,10 +26,25 @@ function App() {
     loadTodos();
   }, []);
 
+    // Add modal state
+  const [modal, setModal] = useState({
+    isOpen: false,
+    type: 'confirm', // 'confirm' or 'alert'
+    title: '',
+    message: '',
+    onConfirm: null
+  });
+
+  const [taskModal, setTaskModal] = useState({
+    isOpen: false,
+    task: null
+  });
+  
+
   // Auto-update AI insights whenever todos change
   useEffect(() => {
     if (todos.length > 0) {
-      updateAIInsights();
+      //updateAIInsights();
     }
   }, [todos]);
 
@@ -67,9 +84,10 @@ function App() {
       // Convert the response and add to todos
       const convertedTodo = Array.isArray(createdTodo) ? convertArrayToTodo(createdTodo) : createdTodo;
       setTodos([...todos, convertedTodo]);
+      //showAlert('✅ Success', 'Task created successfully!');
     } catch (error) {
       console.error('Failed to create todo:', error);
-      alert('Failed to create todo. Please try again!');
+      showAlert('❌ Error', 'Failed to create task. Please try again!');
     } finally {
       setLoading(false);
     }
@@ -91,30 +109,107 @@ function App() {
   const handleToggleComplete = async (taskId, currentStatus) => {
     try {
       setLoading(true);
-      
-      // Toggle the status: Y -> N or N -> Y
       const newStatus = currentStatus === 'Y' ? 'N' : 'Y';
-      
-      // Update in database
       await todoAPI.updateTaskStatus(taskId, newStatus);
-      
-      // Update local state
       setTodos(todos.map(todo => 
         todo.id === taskId 
           ? { ...todo, finished: newStatus }
           : todo
       ));
-      
-      // Refresh AI insights after status change
-      updateAIInsights();
-      
+      // updateAIInsights();
     } catch (error) {
       console.error('Failed to update task status:', error);
-      alert('Failed to update task. Please try again!');
+      showAlert('❌ Error', 'Failed to update task. Please try again!');
     } finally {
       setLoading(false);
     }
   };
+
+    // Function to show custom alerts
+  const showAlert = (title, message) => {
+    setModal({
+      isOpen: true,
+      type: 'alert',
+      title: title,
+      message: message,
+      onConfirm: null
+    });
+  };
+
+
+  // Function to handle task deletion
+  const handleDeleteTask = async (taskId, taskTitle) => {
+     setModal({
+      isOpen: true,
+      type: 'confirm',
+      title: '🗑️ Delete Task',
+      message: `Are you sure you want to delete "${taskTitle}"?\n\nThis action cannot be undone.`,
+      onConfirm: () => confirmDeleteTask(taskId)
+    });
+  };
+
+  const confirmDeleteTask = async (taskId) => {
+    setModal({ ...modal, isOpen: false });
+    
+    try {
+      setLoading(true);
+      await todoAPI.deleteTask(taskId);
+      setTodos(todos.filter(todo => todo.id !== taskId));
+      // updateAIInsights();
+      
+      // Show success message
+      showAlert('✅ Success', 'Task deleted successfully!');
+      
+    } catch (error) {
+      console.error('Failed to delete task:', error);
+      showAlert('❌ Error', 'Failed to delete task. Please try again!');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Function to handle task editing (for now, just show alert - we'll implement later)
+  const handleEditTask = (taskId, currentTask) => {
+      setTaskModal({
+      isOpen: true,
+      task: currentTask
+    });
+  };
+
+  // handling both add and edit:
+  const handleSaveTask = async (taskIdOrData, taskData = null) => {
+    try {
+      setLoading(true);
+      
+      if (taskData) {
+        // Editing existing task
+        await todoAPI.updateTask(taskIdOrData, taskData);
+        setTodos(todos.map(todo => 
+          todo.id === taskIdOrData 
+            ? { ...todo, ...taskData }
+            : todo
+        ));
+        showAlert('✅ Success', 'Task updated successfully!');
+      } else {
+        // Adding new task (use your existing logic)
+        const createdTodo = await todoAPI.createTask(taskIdOrData);
+        const convertedTodo = Array.isArray(createdTodo) ? convertArrayToTodo(createdTodo) : createdTodo;
+        setTodos([...todos, convertedTodo]);
+        showAlert('✅ Success', 'Task created successfully!');
+      }
+      
+      setTaskModal({ isOpen: false, task: null });
+      // updateAIInsights();
+      
+    } catch (error) {
+      console.error('Failed to save task:', error);
+      showAlert('❌ Error', 'Failed to save task. Please try again!');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
 
   return (
     <div className="App">
@@ -141,9 +236,29 @@ function App() {
         <TodoList 
           todos={todos} 
           onToggleComplete={handleToggleComplete}
+          onEditTask={handleEditTask}
+          onDeleteTask={handleDeleteTask}
           loading={loading}
         />
       </main>
+
+      {/* Custom Modal */}
+      <Modal
+        isOpen={modal.isOpen}
+        onClose={() => setModal({ ...modal, isOpen: false })}
+        onConfirm={modal.onConfirm}
+        title={modal.title}
+        message={modal.message}
+        type={modal.type}
+      />
+
+      <TaskModal
+        isOpen={taskModal.isOpen}
+        onClose={() => setTaskModal({ isOpen: false, task: null })}
+        onSave={handleSaveTask}
+        task={taskModal.task}
+        loading={loading}
+      />
     </div>
   );
 }
