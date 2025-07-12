@@ -95,6 +95,28 @@ export const todoAPI = {
     }
   },
 
+  // Add this function to your existing todoAPI object
+  updateTaskStatus: async (taskId, finished) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/crud/update/${taskId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ finished: finished }),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to update task status');
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error updating task status:', error);
+      throw error;
+    }
+  },
+
+
   // Delete a Task
   deleteTask: async (taskId) => {
     try {

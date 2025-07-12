@@ -86,6 +86,36 @@ function App() {
     }
   };
 
+
+  // Function to handle checkbox toggle
+  const handleToggleComplete = async (taskId, currentStatus) => {
+    try {
+      setLoading(true);
+      
+      // Toggle the status: Y -> N or N -> Y
+      const newStatus = currentStatus === 'Y' ? 'N' : 'Y';
+      
+      // Update in database
+      await todoAPI.updateTaskStatus(taskId, newStatus);
+      
+      // Update local state
+      setTodos(todos.map(todo => 
+        todo.id === taskId 
+          ? { ...todo, finished: newStatus }
+          : todo
+      ));
+      
+      // Refresh AI insights after status change
+      updateAIInsights();
+      
+    } catch (error) {
+      console.error('Failed to update task status:', error);
+      alert('Failed to update task. Please try again!');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="App">
       <header className="todo-header">
@@ -108,7 +138,11 @@ function App() {
 
         <TodoForm onAddTodo={handleAddTodo} />
 
-        <TodoList todos={todos} />
+        <TodoList 
+          todos={todos} 
+          onToggleComplete={handleToggleComplete}
+          loading={loading}
+        />
       </main>
     </div>
   );
