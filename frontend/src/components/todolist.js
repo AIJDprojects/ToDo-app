@@ -10,7 +10,7 @@ function TodoList({ todos }) {
   return (
     <div className="todo-list">
       {todos.length === 0 ? (
-        <p>Your tasks will appear here...</p>
+        <p>Your new tasks will appear here...</p>
       ) : (
         <div>
           <h3>Your Tasks:</h3>
@@ -22,7 +22,7 @@ function TodoList({ todos }) {
           ))}
         </div>
       )}
-      <p>Number of todos: {todos.length}</p>
+      <p>Tasks: {todos.length}</p>
     </div>
   );
 }

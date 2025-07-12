@@ -56,23 +56,31 @@ function TodoForm({ onAddTodo }) {
         <button onClick={handleAddTaskClick}>Add Task!</button>
       ) : (
         // Form state - show input fields
-        <div className="todo-form">
-          <input 
-            type="text" 
-            placeholder="Task title*" 
-            value={taskInput}
-            onChange={(e) => setTaskInput(e.target.value)}
-          />
-          <input 
-            type="text" 
-            placeholder="Description" 
-            value={descriptionInput}
-            onChange={(e) => setDescriptionInput(e.target.value)}
-          />
-          <div className="form-buttons">
-            <button onClick={handleSubmit}>Save Task</button>
+        <div className="todo-form"> 
+        <h2>Add a new task</h2>
+        <div className="input-section">
+            <div className="input-fields">
+            <input 
+                type="text" 
+                placeholder="Task title (required)" 
+                value={taskInput}
+                onChange={(e) => setTaskInput(e.target.value)}
+            />
+            <input 
+                type="text" 
+                placeholder="Description (optional)" 
+                value={descriptionInput}
+                onChange={(e) => setDescriptionInput(e.target.value)}
+            />
+            </div>
+            <div className="button-section">
+            <button onClick={handleSubmit} className="save-btn">Save Task</button>
             <button onClick={handleCancel} className="cancel-btn">Cancel</button>
-          </div>
+            </div>
+        </div>
+        
+
+          
         </div>
       )}
     </div>

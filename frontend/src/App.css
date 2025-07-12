@@ -7,7 +7,7 @@
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-  background-color: #f5f7fa;
+  background-color: #d4d6d8;
   color: #333;
 }
 
@@ -69,7 +69,7 @@ body {
 
 .add-todo input:focus {
   border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  box-shadow: 0 0 0 3px rgba(87, 108, 204, 0.1);
 }
 
 .add-todo input::placeholder {
@@ -92,10 +92,160 @@ body {
 .add-todo button:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  background: linear-gradient(135deg, #7a8cee 0%, #3e30c2 100%);
 }
 
 .add-todo button:active {
   transform: translateY(0);
+}
+
+/* Todo Form Styles */
+.todo-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.todo-form .input-section {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.todo-form .input-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.todo-form .button-section {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end; 
+  margin-top: 10px;
+}
+
+.todo-form input {
+  padding: 17px 150px;
+  border: 2px solid #4a98cf;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.todo-form input:focus {
+  border-color: #161897;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.form-buttons button {
+  flex: 1;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+}
+
+
+.save-btn {
+  background: linear-gradient(135deg, #667eea 0%, #4b62a2 100%);
+  color: white !important;
+  border: 2px solid #e9ecef !important;
+}
+
+.save-btn:hover {
+  background: linear-gradient(135deg, #667eea 0%, #4b62a2 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.cancel-btn {
+  background: linear-gradient(135deg, #667eea 0%, #4b62a2 100%);
+  color: white !important;
+  border: 2px solid #e9ecef !important;
+}
+
+.cancel-btn:hover {
+  background: linear-gradient(135deg, #667eea 0%, #4b62a2 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4); 
+}
+
+/* Individual Todo Item Styles */
+.todo-item {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 15px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.todo-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  border-color: #667eea;
+}
+
+.todo-item h4 {
+  color: #2d3748;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.todo-item p {
+  color: #718096;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0;
+  font-style: italic;
+}
+
+/* Todo List Header */
+.todo-list h3 {
+  color: #2d3748;
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+/* Empty state styling */
+.todo-list > p:first-child {
+  background: #f7fafc;
+  border: 2px dashed #cbd5e0;
+  border-radius: 12px;
+  padding: 40px 20px;
+  text-align: center;
+  color: #a0aec0;
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+}
+
+/* Todo count styling */
+.todo-list > p:last-child {
+  text-align: center;
+  color: #667eea;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-top: 20px;
+  padding: 10px;
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: 8px;
 }
 
 /* Todo list section */

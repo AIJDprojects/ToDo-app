@@ -31,8 +31,8 @@ function App() {
   return (
     <div className="App">
       <header className="todo-header">
-        <h1>TodoAP</h1>
-        <p>My Personal Todo Application</p>
+        <h1> 📝 Todo AI</h1>
+        <p>AI Driven Todo List application 🤖 </p>
       </header>
       
       <main className="todo-main">
