@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  backend:  
+    image: todoap-backend:latest  
+    build: ./backend  
+    container_name: todoap-backend
+    ports:
+      - 8070:8070 
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./backend:/app  
+
+  frontend:
+    image: todoap-frontend:latest 
+    build: ./frontend 
+    container_name: todoap-frontend
+    ports:
+      - 8090:8090  # Host:Container port      
+    depends_on:
+      - backend
+    volumes:
+      - ./Frontend:/app
+    

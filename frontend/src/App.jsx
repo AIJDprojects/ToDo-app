@@ -96,10 +96,10 @@ function App() {
   // Function to update AI insights automatically
   const updateAIInsights = async () => {
     try {
-      //const insights = await todoAPI.getAIInsights();
-      const insights = "API respuesta muy inteligente y buena si muy buena creanme no es que me haya gastado todas las interacciones por accidente :v";
-      //setAiInsights(insights.response);
-      setAiInsights(insights)
+      const insights = await todoAPI.getAIInsights();
+      //const insights = "API respuesta muy inteligente y buena si muy buena creanme no es que me haya gastado todas las interacciones por accidente :v";
+      setAiInsights(insights.response);
+      //setAiInsights(insights)
     } catch (error) {
       console.error('Failed to get AI insights:', error);
       // Don't show alert for automatic updates, just log the error

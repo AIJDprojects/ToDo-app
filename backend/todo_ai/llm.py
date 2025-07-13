@@ -165,7 +165,6 @@ class GeminiLLM(CustomLLM):
 # *********************************************************
 def query_llm(model: str):
 
-
     if model == 'gemini':
         llm = GeminiLLM()
         print(f"conected to {model}")
