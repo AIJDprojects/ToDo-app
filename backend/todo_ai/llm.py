@@ -6,6 +6,8 @@
 # *********************************************************
 # Date            Author          Modification
 # 05-07-2025      jdmunoz         Creation
+# 13-07-2025      jdmunoz         Modification to alternate between 
+#                                 models in the API with .env file
 # *********************************************************
 
 # Libraries
@@ -18,6 +20,7 @@ from llama_index.core.base.llms.types import CompletionResponse
 from sqlalchemy import create_engine, MetaData, Table
 from llama_index.core import SQLDatabase
 from llama_index.core.query_engine import NLSQLTableQueryEngine
+from google import genai
 # **********************************************************
 
 
@@ -26,6 +29,12 @@ DB_FOLDER = "database"
 DB_NAME = "todo.db"
 DB_ENTITY = "tasks"
 # *********************************************************
+
+# Load .env variables
+load_dotenv()
+
+# Model to be used in the App 
+model = os.getenv("API_MODEL")
 
 
 
@@ -102,6 +111,46 @@ class CodeGPTLLM(CustomLLM):
         yield response  
 
 
+# Project     :   ToDo Lsit
+# Method      :   GeminiLLM
+# Description :   Class that integrates with the Gemini API 
+#                 to generate completions. it creates the prompt 
+#                 and sends it to the API.
+# Modification History:
+# *********************************************************
+# Date            Author          Modification
+# 13-07-2025      jdmunoz         Creation
+# *********************************************************
+class GeminiLLM(CustomLLM):
+        
+    @property
+    def metadata(self) -> LLMMetadata:
+        return LLMMetadata(
+            context_window=4096,
+            num_output=256,
+            model_name="gemini-custom",
+            is_chat_model=True,  # Set to True if your model supports chat format
+            is_function_calling_model=False
+        )   
+
+    def complete(self, prompt: str, **kwargs:Any) -> CompletionResponse:
+        try: 
+            client = genai.Client()
+            response = client.models.generate_content(
+                    model="gemini-2.5-flash", contents=f"{prompt}"
+                    )
+            
+            return CompletionResponse(text=response.text)
+        except Exception as e:
+            print(f"Error in GeminiLLM call: {e}")
+            return CompletionResponse(text="Error in generating response")
+        
+    def stream_complete(self, prompt: str, **kwargs: Any) -> Iterator[CompletionResponse]:
+        # For non-streaming implementation, just yield the complete response
+        response = self.complete(prompt, **kwargs)
+        yield response         
+
+
 
 # Project     :   ToDo List
 # Method      :   query_llm
@@ -111,13 +160,19 @@ class CodeGPTLLM(CustomLLM):
 # *********************************************************
 # Date            Author          Modification
 # 05-07-2025      jdmunoz         Creation
+# 13-07-2025      jdmunoz         Modification in order to be able to use 
+#                                 gemini or codegpt APIs
 # *********************************************************
-def query_llm():
+def query_llm(model: str):
 
-    load_dotenv()
 
-    # Initialize LLM
-    llm = CodeGPTLLM()
+    if model == 'gemini':
+        llm = GeminiLLM()
+        print(f"conected to {model}")
+    elif model == 'codegpt':
+        # Initialize LLM
+        print(f"conected to {model}")
+        llm = CodeGPTLLM()
 
     # Connect to the database
     db_path = os.path.join(DB_FOLDER, DB_NAME)
@@ -161,6 +216,6 @@ def query_tasks(question: str) -> str:
 
 
 
-# Initialize the LLM query engine as soon as the module is imported
-llm_query_engine = query_llm()
+# Initialize the LLM query engine as soon as the module is imported default gemini
+llm_query_engine = query_llm(model)
 
