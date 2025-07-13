@@ -16,16 +16,6 @@ A full-stack ToDo application featuring a FastAPI backend and React frontend, co
 - **CORS Configuration**  
   - Pre-configured for seamless frontend-backend communication  
 
-## Project Structure  
-
-├── backend/ # FastAPI server
-│ ├── api.py # Core API setup & routing
-│ ├── main.py # Uvicorn server launcher
-│ ├── todo_db/ # Database operations (CRUD, models)
-│ ├── todo_ai/ # AI integration
-│ └── .env # Environment configuration
-├── frontend/ # React application
-└── docker-compose.yaml # Multi-container orchestration
 
 ## Setup with Docker Compose  
 
@@ -35,10 +25,15 @@ The app gives you the option to use gemini or CodeGPT APIs, but in order of thos
 Add `backend/todo_ai/.env` with these variables: 
 
 OPENAI_API_KEY=
+
 CODEGPT_API_BASE=https://api.codegpt.co/api/v1/chat/completions
+
 AGENT_ID=
+
 ORGANIZATION_ID=
+
 API_MODEL=               # variable that set up the usage of the model values: gemini or codegpt 
+
 GEMINI_API_KEY=
 
 ### 2. Build and Launch
