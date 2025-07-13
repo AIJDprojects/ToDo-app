@@ -8,11 +8,8 @@
 // *********************************************************
 
 // API base URL
-//const isProduction = process.env.NODE_ENV === 'production';
-//const API_BASE_URL = isProduction ? '' : '/api';
 const API_BASE_URL ="//localhost:8070"
-//const API_BASE_URL ="http://backend:8070"
-//const API_BASE_URL ="http://todo-network:8070"
+//const API_BASE_URL ="http://pop-os.burbot-iguana.ts.net:8070"
 
 
 
@@ -124,7 +121,7 @@ export const todoAPI = {
   // Delete a Task
   deleteTask: async (taskId) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/crud/delete/${taskId}`, {
+      const response = await fetch(`${API_BASE_URL}/crud/delete/${taskId}`, {
         method: 'DELETE',
       });
       
