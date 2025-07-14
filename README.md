@@ -12,7 +12,6 @@ A Dockerized full-stack application featuring:
 - Gemini/CodeGPT integration for smart task analysis
 - SQLite database persistence
 
-![App Screenshot](<img width="811" height="901" alt="image" src="https://github.com/user-attachments/assets/1bf8794e-c1d3-43ab-b89c-bc3d4e032353" />)
 
 ## 🚀 Key Features
 - **Smart Task Management**  
@@ -28,46 +27,57 @@ A Dockerized full-stack application featuring:
 
 
 ## ⚙️ Installation
-1. Configure Environment
+### 1. Configure Environment
 Create backend/todo_ai/.env with your API keys:
 
-# Required for Gemini
+#### Required for Gemini
 GEMINI_API_KEY="your_gemini_key"
 
-# Required for CodeGPT
+#### Required for CodeGPT
 CODEGPT_API_BASE="https://api.codegpt.co/api/v1/chat/completions"
+
 AGENT_ID="your_agent_id"
+
 ORGANIZATION_ID="your_org_id"
 
-# Select AI provider (gemini or codegpt)
+#### Select AI provider (gemini or codegpt)
+
 API_MODEL="gemini"  
 
-2. Start Services
+### 2. Start Services
 
-3. docker-compose up --build
+docker-compose up --build
 
 ## 🚦 Usage
-Access Applications:
+### Access Applications:
 
-Frontend: http://localhost:3000
+Frontend: http://localhost:8090
 
-Backend Docs: http://localhost:8000/docs
+Backend: http://localhost:8070
 
-Task Management:
+### Task Management:
 
-Add tasks with titles/descriptions
+- Add tasks with titles/descriptions
 
-Mark tasks as complete
+- Mark tasks as complete
 
-Edit or delete existing tasks
+- Edit or delete existing tasks
 
-AI Features:
+## 🌐 API Endpoints
+### CRUD Operations (/crud)
 
-Enable AI suggestions in settings
+Endpoint	Method	Description
 
-Get smart task recommendations
+- /tasks	GET	List all tasks
 
-Analyze task patterns
+- /tasks	POST	Create new task
+
+- /tasks/{id}	GET	Get task details
+
+- /tasks/{id}	PUT	Update task
+
+- /tasks/{id}	DELETE	Remove task
+
 
 ## 🧩 Tech Stack
 ```mermaid
