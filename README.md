@@ -67,14 +67,12 @@ GEMINI_API_KEY="your_gemini_key"
 #### Required for CodeGPT
 ```
 CODEGPT_API_BASE="https://api.codegpt.co/api/v1/chat/completions"
-
 AGENT_ID="your_agent_id"
-
 ORGANIZATION_ID="your_org_id"
-
+OPENAI_API_KEY="codeGpt API key"
 ```
 
-#### Select AI provider (gemini or codegpt)
+#### Select AI provider (gemini or codegpt) - Required by both providers
 ```
 API_MODEL="gemini"
 ```
