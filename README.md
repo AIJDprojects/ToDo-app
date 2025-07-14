@@ -1,41 +1,79 @@
-# ToDo List Application - FastAPI & React Dockerized Implementation
+# ✅ AI-Powered ToDo Manager - FastAPI + React
 
-## Overview  
-A full-stack ToDo application featuring a FastAPI backend and React frontend, containerized using Docker. The backend provides robust CRUD operations for task management and integrates AI-powered features through dedicated API endpoints. The application is designed for easy setup.
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue)](https://python.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![React](https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=black)](https://react.dev)
+[![Docker](https://img.shields.io/badge/Docker-✓-blue?logo=docker)](https://docker.com)
 
-## Key Features  
-- **Task Management**  
-  - Create/Read/Update/Delete tasks  
-  - Track task details: Title, Description, Creation/End Time, Completion Status  
-  - SQLite database persistence  
-- **AI Integration**  
-  - LLM-powered endpoints for smart task suggestions/analysis  
-- **RESTful API Endpoints**  
-  - CRUD Operations: `/crud`  
-  - AI Features: `/llm`  
-- **CORS Configuration**  
-  - Pre-configured for seamless frontend-backend communication  
+**Intelligent task management with AI suggestions**  
+A Dockerized full-stack application featuring:
+- FastAPI backend with CRUD operations
+- React frontend with responsive UI
+- Gemini/CodeGPT integration for smart task analysis
+- SQLite database persistence
+
+![App Screenshot](<img width="811" height="901" alt="image" src="https://github.com/user-attachments/assets/1bf8794e-c1d3-43ab-b89c-bc3d4e032353" />)
+
+## 🚀 Key Features
+- **Smart Task Management**  
+  Create, update, and organize tasks with completion tracking
+- **AI-Powered Insights**  
+  Get intelligent suggestions using Gemini or CodeGPT APIs
+- **Seamless Integration**  
+  Pre-configured CORS for frontend-backend communication
+- **Production-Ready**  
+  Dockerized environment with single-command setup
+- **Flexible AI Backends**  
+  Switch between Gemini and CodeGPT with environment variables
 
 
-## Setup with Docker Compose  
+## ⚙️ Installation
+1. Configure Environment
+Create backend/todo_ai/.env with your API keys:
 
-The app gives you the option to use gemini or CodeGPT APIs, but in order of those to work the APIkeys must be in the next file as follows:
+# Required for Gemini
+GEMINI_API_KEY="your_gemini_key"
 
-### 1. Create Environment File  
-Add `backend/todo_ai/.env` with these variables: 
+# Required for CodeGPT
+CODEGPT_API_BASE="https://api.codegpt.co/api/v1/chat/completions"
+AGENT_ID="your_agent_id"
+ORGANIZATION_ID="your_org_id"
 
-OPENAI_API_KEY=
+# Select AI provider (gemini or codegpt)
+API_MODEL="gemini"  
 
-CODEGPT_API_BASE=https://api.codegpt.co/api/v1/chat/completions
+2. Start Services
 
-AGENT_ID=
+3. docker-compose up --build
 
-ORGANIZATION_ID=
+## 🚦 Usage
+Access Applications:
 
-API_MODEL=               # variable that set up the usage of the model values: gemini or codegpt 
+Frontend: http://localhost:3000
 
-GEMINI_API_KEY=
+Backend Docs: http://localhost:8000/docs
 
-### 2. Build and Launch
+Task Management:
 
-docker-compose up --build
+Add tasks with titles/descriptions
+
+Mark tasks as complete
+
+Edit or delete existing tasks
+
+AI Features:
+
+Enable AI suggestions in settings
+
+Get smart task recommendations
+
+Analyze task patterns
+
+## 🧩 Tech Stack
+```mermaid
+graph LR
+    A[React Frontend] --> B[FastAPI Backend]
+    B --> C[SQLite Database]
+    B --> D[AI Services]
+    D --> E[Gemini API]
+    D --> F[CodeGPT API]
